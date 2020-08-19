@@ -1,11 +1,10 @@
 ---
 title: "Scope and Methods: Problem Set 2"
-author: "Molly McNutt"
+author: "mrm2234"
 date: "2/27/2020"
 output: html_document
 
 ---
-Worked With: Nada Zohayr
 
 ```{r, Pset 2}
 df <- read.csv("ps2_Titanic.csv")
