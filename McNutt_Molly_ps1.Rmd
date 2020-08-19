@@ -1,5 +1,5 @@
 ---
-title: "Molly McNutt (mrm2234): Problem Set One"
+title: "(mrm2234): Problem Set One"
 
 output:
   word_document: default
