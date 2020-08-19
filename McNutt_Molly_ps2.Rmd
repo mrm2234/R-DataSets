@@ -1,0 +1,109 @@
+---
+title: "Scope and Methods: Problem Set 2"
+author: "Molly McNutt"
+date: "2/27/2020"
+output: html_document
+
+---
+Worked With: Nada Zohayr
+
+```{r, Pset 2}
+df <- read.csv("ps2_Titanic.csv")
+```
+```{r, package}
+library(plotrix)
+```
+
+## Question A: 
+
+## Subquestion Number 1: 
+The classes that one could travel in are class 1, class 2, and class 3.
+```{r, Q1}
+table(df$Pclass)
+```
+
+## Subquestion Number 2:  
+Class 1 had a median age of 38 years old, class 2 had a median age of 30 years old, and class 3 had a median age of 25.5 years old. 
+```{r, Q2}
+class1 <- subset(df, Pclass=='1')
+median(class1$Age, na.rm=TRUE)
+class2 <-subset(df, Pclass=='2')
+median(class2$Age, na.rm=TRUE)
+class3 <- subset(df, Pclass=='3')
+median(class3$Age, na.rm=TRUE)
+```
+
+## Subquestion Number 3:
+The mean fare of class 1 is $88.1, the mean fare of class 2 is $23.93528, and the mean fare of class 3 is $13.73592. 
+```{r, Q3}
+mean(class1$Fare, na.rm=TRUE)
+mean(class2$Fare, na.rm=TRUE)
+mean(class3$Fare, na.rm=TRUE)
+```
+
+## Subquestion Number 4:
+Density plots for fare of each class 1, class 2, and class 3 are shown before. 
+```{r, Q4}
+d1 <-density(class1$Fare, na.rm=T)
+plot(d1, main = 'Density Plot of Fare for Class 1', xlab ='Fare')
+
+d2 <- density(class2$Fare, na.rm=T)
+plot(d2, main = 'Density Plot of Fare for Class 2', xlab = 'Fare')
+
+d3 <- density(class3$Fare, na.rm=T)
+plot(d3, main = 'Density Plot of Fare for Class 3', xlab='Fare')
+```
+
+## Subquestion Number 5:
+Our finding is that the mean fare paid by women is higher than men. From the two-sample t.test, our p value is .02087 and our rejection area is t=2.3587. Since p is less than .05 and t>1.96, we reject the null hypothesis that the difference in fares paid by the two sexes is 0. With that being said, our confidence intervals found for both men and women overlap, which suggests that we should not reject the null. Specifically, women's confidence interval was 29.25-57.96 and men's confidence interval was 16.74-31.59. However, it is important to note that confidence intervals are more conservative than the rejection area and p-value given to us by the two sample t.test. In sum, we reject the null hypothesis that the difference in fares paid by the two sexes is 0. I was suprised by this because during the time of the titanic, women were not really working so I expected for men to pay a higher fare since they were mostly the ones working/making money. 
+```{r, Q5}
+women <-subset(df, Sex =='female')
+men <- subset(df, Sex =='male')
+meanF <-mean(women$Fare, na.rm=TRUE)
+meanM <-mean(men$Fare, na.rm=TRUE)
+t.test(women$Fare, men$Fare, mu = 0)
+
+seF <- std.error(women$Fare)
+seM <- std.error(men$Fare)
+ci.lb.F <- meanF - 1.96 * seF  
+ci.ub.F <- meanF + 1.96 * seF  
+ci.lb.M <- meanM - 1.96 * seM  
+ci.ub.M <- meanM + 1.96 * seM  
+ciF <- c(ci.lb.F, ci.ub.F) 
+ciM <- c(ci.lb.M, ci.ub.M)
+
+ciF
+ciM
+```
+
+## Subquestion Number 6: 
+I made the assumption that passengers in third class had the lowest socio-economic status while those in first class had the highest socio-economic status. The null hypothesis is that individuals, regardless of socio-economic status, were given equal opportunities to escape from the Titanic. The alternative hypothesis is that people of lower socio-economic status' were treated differently and given less of a chance to escape from the Titanic. 
+I chose to run three t.tests. The first t.test, using data from first class, has a 95% confidence interval of .3855 to .7768. This means that we are 95% confident in saying that the survival rate first class is somewhere between 39.55% and 77.68%. The second t.test, using data from third class, has a 95% confidence interval of .1061 to .2794. This means that we are 95% confident that the survival rate for third class is somewhere between 10.61% and 27.94%. Because these two confidence intervals do not overlap, choosing the method of confidence intervals, we can reject the null hypothesis. Because our confidence interval for third class was so much lower than that of first class, it seems as though those of lower socio-economic status were given the possibility of escaping the Titanic later than passengers of higher socio-economic status. 
+From the third and final t.test, we are given a p value of p = .0004339 and t=3.8285. Because p is <.05 [p-value]and t>2 [rejection area], we similarly reject the null hypothesis. In sum, all three methods [p-value, rejection area, and confidence interval], conclude that we can reject the null hypothesis which leads us to accept the alternative hypothesis. 
+```{r, Q6}
+firstClassSur<-(class1$Survived=="Yes")
+thirdClassSur<-(class3$Survived=="Yes")
+
+t.test(firstClassSur)
+t.test(thirdClassSur)
+t.test(firstClassSur, thirdClassSur, mu=0)
+```
+## Question B:
+## Subquestion Number 1:
+I think our output (y variable) should be the change in perception of the Colombian government. To this, a question that could be asked could be: Has your opinion on the Colombian government in regards to their post-flooding aid relief improved or decreased since we last spoke with you? If so, on a scale of -10 to 10, with negative 10 [-10] being decreased significantly, 0 being no change,  and positive 10 [+10] being improved significantly, how much has your opinion changed?
+
+## Subquestion Number 2: 
+In this context, the treatment is receiving pamphlets. Besides one group receiving treatment, the control group should be basically identical to the treatment group. I think it would be best if the pamphlets were mailed out randomly to different households across the country, and for the control to also be assigned randomly. 
+
+## Subquestion Number 3: 
+You should check the balance of your control and treatment group pretreatment so you can have a good idea of how similar your two groups are which will help you determine how successful you were in picking random samples.. “Checking the balance” means that you have gathered data on the same variables in both your control and treatment groups. From this, you can see how your groups differ in regards to these variables. In this experiment, I would like the five characteristics in the check and balance to be: political affiliation of the household, household income, if one or more of the adults of the households finished secondary school [education level], how many of the households in the control and treatment groups are in areas that have been affected by flooding in the recent past, and how many of the houses in each group belonged to a large city, as opposed to a small town. In sum, the balance check gives us some variables that are measurable and we compare the control and treatment groups on these variables. If they are not the same, it may mean that the randomization of the two groups was not truly random or you got a really weird sample. 
+
+## Subquestion Number 4:
+For the variable/feature of how many households in each group [control and treatment] are in areas that have been affected by flooding in the recent past, I would want the null hypothesis to be such that the control and treatment groups have similar “splits” such that they each group has similar percentages of households that are in areas affected and not affected by floodings in the recent past. I would like to fail to reject this null hypothesis, meaning that the control and treatment groups had similar splits of households that are in areas that have been affected by flooding and areas that have not been affected by flooding. For the second variable/feature of education level of the adults, I would like the null hypothesis to be 0 which means that households in the control and treatment groups have similar education levels. In other words, the education levels of the treatment and control groups are the same. I would also like to fail to reject the null hypothesis for this variable. 
+
+## Subquestion Number 5:
+In this case, non compliance would most likely look like our treatment group not reading the pamphlet. I’m not really sure how likely a non-compliance issue would be - but it would certainly help if the pamphlet was user friendly - easy to read, engaging [pictures/graphs], etc - which would entice readers to read the pamphlet. However, if there was a problem of non-compliance, the researches could follow up with the group, maybe even send more than one pamphlet, and approach the post treatment survey somewhat as a canvassing opportunity. 
+
+## Subquestion Number 6:
+Some spill over could occur if people in the control and treatment groups live in the same city or town and the people from the treatment group shared the phamplet or the information from the phamphlet with the control group. To avoid this, they could design the experiment so that one city or town could not have households that were part of the control and the treatment groups. By randomizing the treatment and non treatments by geographic location [cities and towns] and not individual households, you could  minimize the spillover effects that were mentioned earlier.
+

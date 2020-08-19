@@ -1,0 +1,88 @@
+---
+title: "Scope and Methods: Problem Set 3"
+author: "Molly McNutt"
+date: "3/15/2020"
+
+output: html_document
+---
+Worked With: Nada Zohayr
+```{r setup, include=FALSE}
+rm(list = ls())
+df<-read.csv("data_problemset3_2020.csv")
+library(tidyverse)
+library(stargazer)
+```
+## Question A:
+
+## Subquestion 1:
+The dimensions of the data set are 217x13 (217 observations and 13 variables).
+```{r, Q1}
+dim(df)
+```
+
+## Subquestion 2:
+Create a new variable for remittances as a proportion of GDP (remittancesPerGDP), a variable for the number of emigrants as a proportion of the population (emigrantsPerPop), and a variable for the number of refugees as a proportion of population (refugeePerPop).
+```{r, Q2}
+df$remittancesPerGDP <- df$remittances.mean/df$GDP.mean
+df$emigrantsPerPop <- df$emigrants.mean/df$pop.mean
+df$refugeePerPop <- df$Refugee.mean/df$pop.mean
+```
+
+## Subquestion 3:
+```{r, Q3}
+plot(df$emigrantsPerPop, df$remittancesPerGDP, cex = 1, col = "red", main = "Relationship Between Emigrants and Remittances", xlab= "Emigrants- Immigrants (proportion of population", ylab = "Remittances (proportion of GDP)", las = 1)
+
+plot(df$refugeePerPop, df$remittancesPerGDP, cex = 1, col = "red", xlab = "Proportion of Refugees (prop of population)", ylab = "Remittance (proportion of GDP)", las = 1)
+```
+
+## Subquestion 4:
+The correlation between remittances(per GDP) and emigrants(proportion of population) (figure 1A) is given by 'correlation'. The correlation between remittances(per GDP) and refugees(proportion of population) (figure 1B) is given by 'correlation2'. From the correlation tests, 'correlation' is positive (approximately .417) while 'correlation2' is negative (approximately -.0015).  Because correlation is bounded between -1 and 1, we can see that 'correlation' is positively correlated but not super strong. 'correlation2', while negative, is near 0 and the confidence interval for 'correlation 2' contains 0. The correlation for figure 1A, with data with emigrants, is most likely positively correlated with remittances because those that emigrate are more likely to have paying jobs at their home country. Moreover, maybe they have been scouted by companies abroad to work given their skills which is why they emigrate. Conversely, refugees are often times seeking asylum because of political and economic turmoil/issues in their home countries and have little to no income to send back to their home country. Moreover, once they become refugees, they often cannot work in the country they arrived in and thus again have little/no income. This understanding helps explain why the correlation between remittances and refugees is negative (or near 0). 
+```{r, Q4}
+correlation <- cor.test(df$remittancesPerGDP, df$emigrantsPerPop, method = "pearson")
+correlation
+
+correlation2 <- cor.test(df$remittancesPerGDP, df$refugeePerPop, method = "pearson")
+correlation2
+```
+
+## Subquestion 5:
+```{r, Q5}
+data1 <- data.frame(cbind(df$women_parl.mean, df$emigrantsPerPop))
+lm.bivariate <- lm(df$women_parl.mean ~ df$emigrantsPerPop, data = data1)
+
+data <- data.frame(cbind(df$women_parl.mean, df$emigrantsPerPop, df$internet.mean, df$remittancesPerGDP))
+lm.multi <- lm(df$women_parl.mean ~ df$emigrantsPerPop + df$internet.mean + df$gdp_percapita.mean + df$remittancesPerGDP, data = data)
+
+stargazer(lm.bivariate, lm.multi, type = "text")
+```
+
+## Subquestion 6:
+In column 2, the remittances (prop of GDP), GDP per capita, and Emigrant (-immigrants) prop are all significant at the 5% confidence level. You can also use t-test and p-values to answer the questions. 
+
+## Subquestion 7:
+When just looking at the proportion of women in parliament as a function of the proportion of emigrants in the population, there is very little correlation (-.007). That means, that for one unit change in emigrants, the proportion of women in parliament changes by -.007 (which is a very little change - almost negligable). Moreover, this coefficient is not even significant at the 10% level. However once we account/control for other variables, specifically remittances per GDP, GDP per capita, and internet mean, we see which variables are significant at different levels on the porportion of women in parliament. Specifically, we can see in the multivariate regression that for one unit change in emigrants per population, the proportion of women in parliament will change by 128.655 and this coefficient is significant at the .05% level. This tells us that emigrants as a proportion of the population does impact the proportion of women in parliament, which we were unable to see from a simple bivariate regression. 
+
+## Subquestion 8:
+A confounding variable influences both the dependent (women in parliament) variable and the independent (emigrants- immigrants) variable.
+
+Variables:
+
+1) % population using internet: 
+- Confounding Variable? I think % population using internet is a confounding variable. On one hand, having a high percent of population using internet means that the country is pretty advanced and usually advanced/developed countries are able to best use their workforce which means that women are also working. By extension, more women will be able to take on political roles in parliament/government systems. Regarding number of emigrants, internet is a reflection on the quality of life. Therefore, having a high % of population using internet means that the quality of life is pretty high and we can assume that fewer people will leave their home country if their quality of life is high (as here determined by internet accessibility/usage). 
+- Omitted Variable Bias? Given that the researches are operating under the belief that emigrants who move to democratic countries spread democratic ideals in their home country, removing the internet variable will introduce omitted variable bias because this variable is important to understanding the pre-existing education levels which can be used somewhat as a proxy to advancement/democratization (here, we assume that internet acts as a tool for education which enables men and women become more educated and take on parliamentary roles). With that being said, the chain of relations is somewhat long so I'm not sure that the bias introduced by removing this variable will have a huge impact on our analysis. 
+
+2) GDP per capita:
+- Confounding Variable? GDP/capita is a confounding variable because it influences the proportion of people leaving a country (emigrating) and influences the proportion of women in parliament. With a low GDP/capita, we can assume that the quality of life in that country is pretty low which increases the likelihood of people emigrating in order to increase their quality of life abroad.  GDP/capita also influences the proportion of women in parliament because having a high GDP/capita is generally a reflection of advanced/developed countries which have high levels of education/technology/etc and by extension, women are more likely to exist in governmental roles given the higher levels of education. 
+- Omitted Variable Bias?  Given that the researches are operating under the belief that emigrants who move to democratic countries spread democratic ideals in their home country, removing GDP/capita would introduce omitted variable bias because this variable is important to understanding the existing status/development/democratic levels of the country. Generally, democracies/advanced societies are associated with higher GDP/capita. Thereofore, we can propose that countries with higher GDP/capita are already more democratized and thus have more women in parliament. If we take out this variable, we lose a little bit of understanding of the home country's economic and political status. However, being a democracy does not automatically equal high GDP/capita so the claims made before are made on general assumptions which are not incredibly helpful. Therefore, while I do think omitting this variable would introduce omitted variable bias, I do think there are better variables to look at. 
+
+3) Remittances (prop of GDP):
+- Confounding Variable? I would say that this variable is also a confounding variable. Given the context of question 8, which states that emigrants spread democratic values in their home countries, I think having a high propotion of GDP be remittances would influence women in parliament as well as the number of emigrants. It influences the number of emigrants becuase the more remittances, we can assume that the higher number of emigrants (who work and send money home). It also influences women in parliament because, given the context of question 8, we can assume that the more remittances, the more spread of democratic values in the home country. And since having women working, gender-equality, is a democratic ideal, we can assume that the higher the remittances, the more proportion of women working in parliament/government positions. 
+- Omitted Variable Bias? Given that the researches are operating under the belief that emigrants who move to democratic countries spread democratic ideals in their home country, removing the remittances variable (which is a reflection on the number of emigrants) would introduce omitted variable bias because remittances is important to understanding women in parliament. Remittances helps us understand how much communication is going on with the emigrants and their friends/relatives back in the home country, and thus their likelihood of spreading democratic values, so omitting this variable may have overestimating the relationship between emigrants and democratic values (such as women in parliament). For example, if a country has a ton of emigrants but there are very few remittances, this would mean that the emigrants are not really in close communication with those at home and are less likely to have a huge impact on the spread of democratic values in their home country. 
+
+## Subquestion 9:
+Because our dependent variable is the proportion of women in parliament, I thought another variable we should examine is the female employment mean. Before running any regression analysis, I assumed that the two variables, female employment mean and proportion of women in parliament, would be positively correlated. I believed this because more women working creates an environment where women can take can hopefully take more leadership roles, such as in parliament. However, regression when accounting for the female employment mean did not quite support my thinking. Specifically, the coefficient for female employment was negative (-.114). However, this is very close to zero and is also not statistically significant at the p = .05 or even the p = .1 level. It is important to note that this regression however made the Emigrant variable statistically significant at the p = .001 level and this coefficient increased to 170 (up from 128 in the regression given to us by the pset). The other variables did change however they all were still significant at the same level (or still not statistically significant at any given level). Overall, I was surprised that the femal employment mean had a negative coefficient in this regression. 
+```{r, Q9}
+data2 <- data.frame(cbind(df$women_parl.mean, df$emigrantsPerPop, df$internet.mean, df$remittancesPerGDP, df$female_employment.mean))
+lm.multi2 <- lm(df$women_parl.mean ~ df$emigrantsPerPop + df$internet.mean + df$gdp_percapita.mean + df$remittancesPerGDP + df$female_employment.mean, data = data2)
+stargazer(lm.bivariate, lm.multi2, type = "text")
+```

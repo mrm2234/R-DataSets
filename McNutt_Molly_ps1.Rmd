@@ -1,0 +1,100 @@
+---
+title: "Molly McNutt (mrm2234): Problem Set One"
+
+output:
+  word_document: default
+  html_document: default
+date: "February 13, 2020"
+---
+
+
+# Question A
+- 1) The population of interest are the American politicians who are or have been elected to US Congress. 
+- 2) Their null hypothesis will be that the average age of first-time elected politicians among US national politicians is the same as that of EU Countries’ politicians which has been calculated to be 45 years of age. 
+- 3) For the Central Limit Theorem to apply, the sample must be randomly drawn and must be large enough (~30). However, in our case, none of the selected politicians from four Southern and four Midwest states answered the survey. In total, 8 states did not submit information for the survey. Therefore, even though our sample size is big enoug [500], there could be many reasons behind why these people chose to answer, or not answer, the survey and thus is not random so the CLT does not apply. Similar to our in class example regarding the Women’s march and 30% of the sample answering, I do not think the CLT is applicable because there could be many reasons behind why politicians from these 8 states declined to answer the survey and is thus not randomly drawn. The claim that the CLT can apply can be made if we believe that there was a totally random reason for the politicians from those 8 states to not answer but this is unlikely to be true. 
+- 4) In order for the CLT to apply, you must be working with a randomized sample. In our case, our researchers need to change the sample as this one is not random. However, because they are looking at age, and the age of elected officials can be easily found and verified online, they could move foreward with the test using the age data from the selected politicians in those four southern and four midwest states by finding it themselves and integrating that data into the larger set of data. This would keep the data set random. If for some reason finding this data was not possible, I would have the researches select other candidates randomly from these eight states and use that data.  
+- 5) You could frame this theory in a causal way by proposing the idea that within the past 10 years, states that exhibit high economic development are more likely to have female representatives than states that have low economic development. To test this hypothesis, it is important to first determine which states are considered to have “high economic development.” Therefore, the researches must first determine an index or set of conditions which can be used to determine which states have high economic development and which have low economic development. After this has been done, and each state is either considered having high or low economic development, the researchers should then gather data, specifically regarding gender, within the past ten years of all the US representatives. Because we are looking at the respresentatives within the past 10 years, and because senator and representative terms are six and two years respectively, this should not be an overwhelming amount of data to compile. However, because states have different populations, the number of representatives changes by state. All states have two senators. However, because the number of representatives varies, the researches may want to use percents [such as percentage of female representatives vs male] when analyzing their data as raw numbers are not appropriate for comparisons. From there, they could make draw some conclusions on the average for low and high economic states regarding their propensity for having female representatives. However, they should make sure that the sample size of states is large enough and that the number of low and high income states is comparable. If there are only two low economic development states and 45 high economic development states, the data for the low economic states would not illuminate much as this is a very small sample and thus hard to draw conclusions from. Hypothesis: Within the past 10 years, states that show higher economic development have had more women Congressional representatives than states of lower economic development. 
+
+# Question B
+
+- 1) The median is much lower than the mean because there are a few/small number of countries which lodge a very large number of asymlum applications each month which brings the monthly mean way up. However, the majority of the 44 countries in our sample do not lodge nearly as many asylum applications each month which is why the median [middle-most] monthly mean is 52 applications while the average monthly mean is much higher with 229.8 applications. The variance and standard deviation would also have been another descriptive statistic that would be useful in understanding the spread of our data. With the standard deviation, we could visually see the range around the mean that most of data falls into (68% within one standard deviation, 95% data within two standard deviations, etc). We could also utilize the five number summary which gives us the min, first quartile, median, third quartile, and maximum which could help us visualize the data. 
+- 2) The standard deviation is also the square root of the variance. Thus, the variance of for Belgium, Germany, and the United States in terms of their monthly mean of Asylum seekers is 6561, 232324, and 36 respectively. Having little variation from the mean indicates that the data collected was all pretty close to the mean and thus the variance was also pretty small. The United States has a small variance value, 36, which means that their individual monthly means were all around the calculated mean of 23. Germany on the other hand has a very large variance, 232324, which indicates that the individual monthly means that were collected varied greatly around the mean of 2750. Belgium is in the middle with a variance of 6561. Overall, the individual monthly mean of Asylum seekers varied greatly in Germany, varied somewhat in Belgium, and varied little in the United States. 
+- 3) The researcher claims that well-established democracies are more likely to accept applications for asylum seekers but I do not think we can test this theory with this data. Likelihood of accepting applications depends on the number of applications that the country accepts out of the total application pool, thus is an acceptance rate. With our current data, we do not know how many total applications each country received. For example, one country that is not a well established democracy may only have a monthly mean of 3 yet maybe they only received that many applications. Here, the likelihood of being accepted is 100%. Conversely, a well established democracy may have a higher monthly mean but they may not have accepted all the applications and thus their acceptance rate is less than 100%. Therefore, in order to test the theory that well established democracies are more likely to accept applications for asylum seekers, I would like to collect data on the total number of applications that a country received and how many they accepted. From this, we could see the monthly average asylum application acceptance rate for each country over a given period of time and then compare the acceptance rates to see if well established democracies generally have higher acceptance rates than other countries. 
+
+# Question C
+
+```{r , Question C}
+
+rm(list=ls())
+df <- read.csv("ps1_Titanic.csv")
+df
+```
+
+Preliminary Question: Calculate the number of columns and rows (Seen in code below). 
+```{r, Preliminary Question}
+ncol(df) 
+nrow(df) 
+dim(df)
+```
+
+## Question C Part 1:
+- 1) Mode of Survived. I chose to calculate mode of Survived becuase it shows that more people died than survived [which is useful/interesting to know]. Code for calculation below. 
+```{r, Question 1.1}
+table(df$Survived)   
+```
+- 2) Mean of Age. I chose the average age of those onboard because I wanted know the mean age of the passengers but median could also be useful. Code for calculation below. 
+```{r, Question 1.2}
+mean(df$Age, na.rm=T) 
+```
+- 3) Mode of Pclass. I chose the mode because it tells us which class had the highest number of people. Code for calculation below. 
+
+```{r, Question 1.3}
+table(df$Pclass) 
+```
+- 4) Mode of Sex. I chose mode because it shows the number of men and women on board. Code for calculation below. 
+
+```{r, Question 1.4}
+table(df$Sex) 
+```
+- 5) Mean of Fare. I chose mean because I wanted to know how much on average a ticket for this boat cost. Code for calculation below. 
+```{r, Question 1.5}
+mean(df$Fare, na.rm=T) 
+```
+
+## Question C Part 2:
+Calculate and Report the Variance and Standard deviation of age of passengers. Code for calculation below. 
+```{r, Question 2}
+var(df$Age, na.rm=T) 
+sd(df$Age, na.rm=T) 
+```
+
+## Question C Part 3: 
+Histogram of Fare and boxplot of Pclass. 
+```{r, Question 3}
+hist(df$Fare, breaks = seq(0,300, by=20), main="Frequency of Fare", xlab = "Fare ($)", ylab = "Frequency")
+
+plot(table(df$Pclass), main = "Individuals Per Passenger Class", xlab = "Class Level", ylab = "Frequency or Number of Individuals", ylim = c(0,100))
+    
+
+```
+
+## Question C Part 4: 
+Calculate the standard error of the mean of the age of passengers. The standard error is equivalent to the (standard deviation/sqrt(n)). In question 2, we calculated the variance and the standard deviation of our data. However, the standard error is the standard deviation of the sample means and thus measures the spread of the sample means. Conversely, the standard deviation and variance tell us about the population's spread/dispersion. Code below. 
+```{r, Question 4}
+mean(df$Age, na.rm=T)
+length_Age<- sum(complete.cases(df$Age))
+sem<-sd(df$Age, na.rm=T)/sqrt(length_Age)
+sem 
+```
+
+## Question C Part 5: 
+Finding the maximum and minimum fares paid by the passengers and which class these passengers travelled in. 
+```{r, Question 5}
+summary(df$Fare)
+min(df$Fare, na.rm=T) #Tells us which fare is the lowest
+(1:nrow(df))[df[,6]== 6.45] #Tells us which row the minimum fare is in. 
+df[127,3] #This returns the Pclass for the person who paid the lowest fare
+max(df$Fare, na.rm=T) #Tells us which fare is the highest. 
+(1:nrow(df))[df[,6]== 227.525] #This tells us which row the maximum fare is in. 
+df[93,3] #This returns the Pclass for the person who paid the highest fare. 
+```

@@ -1,0 +1,85 @@
+---
+title: "Scope and Methods: Problem Set 5"
+author: "Mrm2234"
+date: "4/21/2020"
+output: html_document
+---
+```{r setup, include=FALSE}
+rm(list = ls())
+df<-read.csv("WDI_Data.csv")
+
+library(stargazer)
+library(tidyverse)
+library(gplots)
+```
+
+## Question A:
+
+## Subquestion 1: 
+This data set is panel data because it contains time series data [data from one unit across time] and cross sectional data [looking at many different units]. 
+
+## Subquestion 2:
+We have data from 1960 through 2014. 
+```{r, min and max}
+min(df$year, na.rm=T)
+max(df$year, na.rm=T)
+```
+
+## Subquestion 3: 
+This coefficient is significant at the p = .01 level. For one unit change in the radios per 1000 people, the gdp per capita changes [increases] by 12.223. 
+```{r, Q3}
+data1 <- data.frame(cbind(df$gdpcap, df$radiospcap))
+lm.bivariate <- lm (df$gdpcap ~ df$radiospcap, data = data1)
+stargazer(lm.bivariate, type = "text")
+```
+
+## Subquestion 4: 
+```{r, radio}
+plot(df$year, df$gdpcap, ylab = "GDP Per Capita", xlab = "Year")
+plot(df$year, df$radiospcap, ylab = "Radios per 1000", xlab = "Year")
+```
+
+## Subquestion 5:
+```{r, plot}
+plotmeans(df$gdpcap ~ df$year, n.label=F, bars=F, main = "GDP per Capita over time")
+
+plotmeans(df$radiospcap ~ df$year, n.label = F, bars = F, main = "Radios per 1000 over time")
+
+```
+
+## Subquestion 6: 
+The fixed effect is significant at the same level (p < .01) as in question 3. For one unit change in the radios per 1000 people, the gdp per capita changes [increases] by 13.675 which is an increase from 12.223 as found in question 3. Fixed effects capture the effects of all variables that do not change over time. 
+```{r, fixed effects}
+fe <- lm (df$gdpcap ~ df$radiospcap + as.factor(year), data = df)
+
+stargazer(fe, omit=c("year"), type='text')
+```
+## Question B:
+I would choose: Number of Doctors per capita, public or private health system. 
+
+Now that we are trying to identify causality, with partisanship of the government possibly influences the effectiveness of the response, your variables would be different. Here, we are trying to identify clear and direct impact on partisanship on effectiveness. In the first question, I woul duse number of doctors per capita but I would not use that variable here as it is not related to partisanship of the government and will not help us determine the causal relationship. 
+
+## Question C:
+ 
+## Subquestion 2:
+Social Desirability Bias: Is when people respond to the survey with the answer they think you want to hear, regardless of whether they actually believe this answer. Because this survey is taken in NYC (among college students), and because NYC is a pretty liberal area, students who have more conservative values [a function of their background/environment where they grew up] may say they are more liberal because that is what they think the people giving the survey want to hear [given the location of the survey which is NYC, a very liberal area]. 
+
+Framing Bias: The way you phrase a question can influence how people answer it. The survey can suffer from framing bias if the questions are phrased in a biased way. For instance, the third questions asks how disapproving the college student is of Trump, which is a very leading questions (leads the survey taker into thinking they already disapprove of Trump even if they dont which could influence their answer). 
+
+Order Bias: The order of your questions can influence their opinions/answers. Americans have a very pro-America mindset. In truth, most people are relatively loyal to their country and while they may have some issues with their government, they often times like to think they are better than other countries. So, by ordering the question regarding approval/disapproval of trump after asking whether the person believes that the US government did a better job than other countries regarding COVID could impact their answer in response to the third question (approval/disapproval of Trump). 
+
+## Subquestion 3:
+
+Revised Question 1: 
+"Do you believe college students are more, equal, or less liberal than the average American voter?"
+The original question asked if college students are more liberal than the average, however, I added "more, equal, or less" in order to capture all three opinions that the survey taker can take. This will hopefully reduce any framing biases. I also think this question may be better if it was placed last - so really question number three to reduce order bias. 
+
+Revised Question 2: 
+"Do you believe that the US was able to respond as thoroughly to the COVID outbreak as some other countries?"
+I tried to reduce framing bias by using the word "thoroughly" instead of "effectively". At least to me, thorough seems less competetive than effective. Maybe now we can lessen the nationalistic tendencies of the subject? I also rephrased "other governments" as "some other countries" because the "some" acknowledges that some countries did a better job than the US but some others also did a worse job. Here, the US doesn't have to be at the bottom of the pack as was insinuated in the original question. I also think this question should go after the Trump question. 
+
+Revised Question 3: 
+"On a scale of 1-10, with 1 being very disapproving and 10 being highly approving, where do you stand on Donald Trump over the past four years?"
+Instead of asking how disapproving the subject is to Trump, I give them a scale and ask them to self rate where they stand on this scale. This is in hopes of reducing framing bias (the original question only mentioned how disapproving one was which could influence answers). I think this question should be asked first. 
+
+I think the Trump question should be asked first, US vs other countries second, and how liberal college students are compared to the average American last. In this order, the first and third questions are pretty partisan however hopefully the question about the US government [both national and state] handling the COVID pandemic will give the person taking the survey a break to maybe make less biased/partisan decisions. 
